@@ -46,24 +46,32 @@ export default function StartPage() {
     }
   }
 
+  useEffect(() => {
+    console.log("cardNumber", cardNumber);
+  }, [cardNumber]);
+
   return (
     <>
       <div className="card-container">
         <div className="card-front">
           <img src="/img/bg-card-front.png" alt="card front" />
-          <div className="card-front-text">
+          <div className="card-front-logo-and-text">
             <div className="card-logo">
               <img src="/img/card-logo.svg" alt="card logo" />
             </div>
-            <div className="card-number">{!cardNumber ? "0000 0000 0000 0000" : maskedCardNumber}</div>
-            <div className="card-holder">{!cardHolder ? "Jane Appleseed" : cardHolder}</div>
-            <div className="card-expiry">00/00</div>
+            <div className="card-info uppercase">
+              <div className="card-number mono">{!cardNumber ? "0000 0000 0000 0000" : maskedCardNumber}</div>
+              <div className="card-holder-and-expiry small">
+                <div className="card-holder">{!cardHolder ? "Jane Appleseed" : cardHolder}</div>
+                <div className="card-expiry mono">00/00</div>
+              </div>
+            </div>
           </div>
         </div>
         <div className="card-back">
           <img src="/img/bg-card-back.png" alt="card back" />
           <div className="card-back-text">
-            <span className="card-cvc">000</span>
+            <span className="card-cvc mono">000</span>
           </div>
         </div>
       </div>
