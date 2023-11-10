@@ -20,6 +20,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  outline: none;
 }
 
 body {
@@ -41,17 +42,19 @@ form {
   align-items: flex-start;
   justify-content: center;
   text-align: left;
+  width: 100%;
 }
 
 label,
 .small {
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
+  letter-spacing: 0.1rem;
 }
 
 label {
-  margin-bottom: 0.25rem;
-  letter-spacing: 0.1rem;
+  margin-bottom: 0.75em;
+  display: block;
 }
 
 input[type="text"] {
@@ -68,6 +71,19 @@ input[type="text"]::placeholder {
   color: var(--light-grayish-violet);
 }
 
+input[type="text"]:focus {
+  border-color: var(--very-dark-violet);
+  /* border: double 3px transparent;
+  border-radius: 6px;
+  background-image: linear-gradient(hsl(249, 99%, 64%) to hsl(278, 94%, 30%));
+  background-origin: border-box;
+  background-clip: padding-box, border-box; */
+}
+
+input[type="text"]:invalid {
+  border-color: var(--red);
+}
+
 button {
   font-family: inherit;
   font-size: 1rem;
@@ -82,6 +98,11 @@ button {
   margin-bottom: 1rem;
 }
 
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
 .uppercase {
   text-transform: uppercase;
 }
@@ -91,6 +112,7 @@ button {
   margin: auto;
   display: flex;
   flex-direction: row;
+  align-items: center;
 }
 
 .card-front,
@@ -116,7 +138,7 @@ button {
 }
 
 .card-front-logo-and-text {
-  padding: 1rem;
+  padding: 1.25rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -146,18 +168,44 @@ button {
 }
 
 .card-back > div {
+  display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
+  padding-right: 3rem;
+  padding-bottom: 8px;
+  color: var(--white);
 }
 
 .form-container {
-  width: 20rem;
   padding-left: 5rem;
+}
+
+.form-expiry-and-cvc {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.form-expiry {
+  margin-right: 1rem;
+}
+
+.form-expiry input[type="text"] {
+  width: 5rem;
+}
+
+.form-expiry input[type="text"]:first-of-type {
+  margin-right: 0.5rem;
 }
 
 .mono {
   font-family: "Space Mono", monospace;
+}
+
+.red {
+  color: var(--red);
 }
 
 @keyframes subtle-move1 {

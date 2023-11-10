@@ -7,6 +7,7 @@ export default function StartPage() {
   const [cardHolder, setCardHolder] = useState(""); // "Jane Appleseed
   const [expiryMM, setExpiryMM] = useState(""); // "01"
   const [expiryYY, setExpiryYY] = useState(""); // "23"
+  const [cvc, setCvc] = useState(""); // "123"
 
   function handleCardNumberChange(e) {
     const isValid = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"].includes(e.target.value.slice(-1));
@@ -35,8 +36,17 @@ export default function StartPage() {
     }
   }
 
+  function handleCvcChange(e) {
+    const isValid = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"].includes(e.target.value.slice(-1));
+    if (isValid) {
+      setCvc(e.target.value);
+    } else {
+      setCvc(e.target.value.slice(0, -1));
+    }
+  }
+
   function checkIsNumber(e) {
-    const isValid = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "Backspace"].includes(e.key) === false;
+    const isValid = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "Backspace", "Tab"].includes(e.key) === false;
     if (isValid) {
       // if not a number or backspace
       e.preventDefault(); // prevent input
@@ -45,10 +55,6 @@ export default function StartPage() {
       setCardNumberInputError(false);
     }
   }
-
-  useEffect(() => {
-    console.log("cardNumber", cardNumber);
-  }, [cardNumber]);
 
   return (
     <>
@@ -60,10 +66,13 @@ export default function StartPage() {
               <img src="/img/card-logo.svg" alt="card logo" />
             </div>
             <div className="card-info uppercase">
-              <div className="card-number mono">{!cardNumber ? "0000 0000 0000 0000" : maskedCardNumber}</div>
+              <div className="card-number mono">{!cardNumber ? "0000 0000 000 0000" : maskedCardNumber}</div>
               <div className="card-holder-and-expiry small">
                 <div className="card-holder">{!cardHolder ? "Jane Appleseed" : cardHolder}</div>
-                <div className="card-expiry mono">00/00</div>
+                <div className="card-expiry mono">
+                  {!expiryMM ? "00" : Number(expiryMM) < 10 && Number(expiryMM) > 0 ? `0${expiryMM}` : expiryMM}/
+                  {!expiryYY ? "00" : Number(expiryYY) < 10 && Number(expiryYY) > 0 ? `0${expiryYY}` : expiryYY}
+                </div>
               </div>
             </div>
           </div>
@@ -71,7 +80,7 @@ export default function StartPage() {
         <div className="card-back">
           <img src="/img/bg-card-back.png" alt="card back" />
           <div className="card-back-text">
-            <span className="card-cvc mono">000</span>
+            <span className="card-cvc mono">{!cvc ? "000" : cvc}</span>
           </div>
         </div>
       </div>
@@ -85,6 +94,8 @@ export default function StartPage() {
             placeholder="e.g. Jane Appleseed"
             onChange={(e) => setCardHolder(e.target.value)}
             value={cardHolder}
+            pattern="[A-Za-z ]{1,26}"
+            maxLength={26}
           />
           <label htmlFor="form-card=number">Card Number</label>
           <input
@@ -100,13 +111,52 @@ export default function StartPage() {
             pattern="[0-9]{16}"
             maxLength="16"
           />
-          {cardNumberInputError && <p>Numbers only</p>}
-          <label htmlFor="form-expire-mm">Exp. Date (MM/YY)</label>
-          <input id="form-expire-mm" name="expire-mm" type="text" placeholder="MM" />
-          <input id="form-expire-yy" name="expire-yy" type="text" placeholder="YY" />
-          <label htmlFor="form-cvc"></label>
-          <input id="form-cvc" name="form-cvc" type="text" placeholder="e.g. 123" />
-          <button>Confirm</button>
+          <div className="form-expiry-and-cvc">
+            <div className="form-expiry">
+              <label htmlFor="form-expire-mm">Exp. Date (MM/YY)</label>
+              <input
+                id="form-expire-mm"
+                name="expire-mm"
+                type="text"
+                placeholder="MM"
+                onChange={handleExpiryMMChange}
+                onKeyDown={checkIsNumber}
+                value={expiryMM}
+                pattern="[0-9]{2}"
+                maxLength="2"
+              />
+              <input
+                id="form-expire-yy"
+                name="expire-yy"
+                type="text"
+                placeholder="YY"
+                onChange={handleExpiryYYChange}
+                onKeyDown={checkIsNumber}
+                value={expiryYY}
+                pattern="[0-9]{2}"
+                maxLength="2"
+              />
+            </div>
+            <div className="form-cvc">
+              <label htmlFor="form-cvc">CVC</label>
+              <input
+                id="form-cvc"
+                name="form-cvc"
+                type="text"
+                inputMode="numeric"
+                placeholder="e.g. 123"
+                onChange={handleCvcChange}
+                onKeyDown={checkIsNumber}
+                autoComplete="cc-csc"
+                value={cvc}
+                pattern="[0-9]{3}"
+                maxLength="3"
+              />
+            </div>
+          </div>
+          <button type="submit" disabled={!cardNumber || !cardHolder || !expiryMM || !expiryYY || !cvc}>
+            Confirm
+          </button>
         </form>
       </div>
     </>
