@@ -5,7 +5,7 @@ import { AppProvider } from "./AppContext.jsx";
 
 import App from "./App.jsx";
 
-import CompletePage from "./CompletePage";
+import ThankYouPage from "./ThankYouPage";
 import CardInputPage from "./CardInputPage.jsx";
 
 import "./index.css";
@@ -17,7 +17,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Routes>
           <Route path="/" element={<App />}>
             <Route path="" element={<CardInputPage />} />
-            <Route path="complete" element={<CompletePage />} />
+            <Route path="complete" element={<ThankYouPage />} />
           </Route>
         </Routes>
       </AppProvider>

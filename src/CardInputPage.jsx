@@ -136,16 +136,18 @@ export default function CardInputPage() {
   const navigate = useNavigate();
 
   return (
-    <form onSubmit={(e) => e.preventDefault() || navigate("/complete")}>
-      <FormCardholderNamePart />
-      <FormCardNumberPart />
-      <div className="form-expiry-and-cvc">
-        <FormCardExpiryPart />
-        <FormCardCVCPart />
-      </div>
-      <button type="submit" disabled={!formIsComplete}>
-        Confirm
-      </button>
-    </form>
+    <section className="form-card-input">
+      <form onSubmit={(e) => e.preventDefault() || navigate("/complete")}>
+        <FormCardholderNamePart />
+        <FormCardNumberPart />
+        <div className="form-expiry-and-cvc">
+          <FormCardExpiryPart />
+          <FormCardCVCPart />
+        </div>
+        <button type="submit" disabled={!formIsComplete}>
+          Confirm
+        </button>
+      </form>
+    </section>
   );
 }

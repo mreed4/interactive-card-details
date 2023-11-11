@@ -36,6 +36,21 @@ img {
   display: block;
 }
 
+h2 {
+  font-size: 1.5rem;
+  margin: 1.5rem 0;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  color: var(--very-dark-violet);
+}
+
+p {
+  font-size: 1rem;
+  color: var(--dark-grayish-violet);
+  margin-bottom: 2rem;
+}
+
 form {
   display: flex;
   flex-direction: column;
@@ -177,8 +192,18 @@ button:disabled {
   color: var(--white);
 }
 
-.form-or-thank-you-container form {
+.form-or-thank-you-container {
   padding-left: 5rem;
+}
+
+.form-or-thank-you-container > section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  animation: fadeIn 250ms ease-in-out;
+  width: 27rem;
 }
 
 .form-expiry-and-cvc {
@@ -186,18 +211,18 @@ button:disabled {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-}
-
-.form-expiry {
-  margin-right: 1rem;
+  width: 100%;
 }
 
 .form-expiry input[type="text"] {
-  width: 5rem;
+  width: 5.5rem;
 }
 
 .form-expiry input[type="text"]:first-of-type {
   margin-right: 0.5rem;
+}
+
+.thank-you-page {
 }
 
 .mono {
@@ -206,4 +231,13 @@ button:disabled {
 
 .red {
   color: var(--red);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
