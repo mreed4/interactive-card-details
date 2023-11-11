@@ -1,27 +1,11 @@
 import { useContext } from "react";
 import { AppContext } from "./AppContext";
 
-export default function CardInputPage() {
-  const {
-    cardNumber,
-    cardNumberInputError,
-    cardHolder,
-    expiryMM,
-    expiryYY,
-    cvc,
-    handleCardHolderChange,
-    handleCardNumberChange,
-    handleExpiryMMChange,
-    handleExpiryYYChange,
-    handleCvcChange,
-    checkIsNumber,
-
-    handleExpiryMMBlur,
-    handleExpiryYYBlur,
-  } = useContext(AppContext);
+function FormCardholderNamePart() {
+  const { cardHolder, handleCardHolderChange } = useContext(AppContext);
 
   return (
-    <form onSubmit={(e) => e.preventDefault()}>
+    <>
       <label htmlFor="form-cardholder-name">Cardholder Name</label>
       <input
         id="form-cardholder-name"
@@ -33,12 +17,32 @@ export default function CardInputPage() {
         pattern="[A-Za-z ]{1,26}"
         maxLength="26"
       />
-      {/* {cardHolderLettersRemaining} */}
-      <label htmlFor="form-card=number">
-        Card Number {cardNumberInputError && <span className="red">Numbers only</span>}{" "}
-        {cardNumber.length < 19 && cardNumber.length !== 0 && <span className="red">16 digits</span>}
-      </label>
+    </>
+  );
+}
 
+function FormCardNumberPart() {
+  const { cardNumber, handleCardNumberChange, checkIsNumber, cardNumberInputError } = useContext(AppContext);
+
+  function CardNumberLength() {
+    if (cardNumber.length < 19 && cardNumber.length !== 0) {
+      return <span className="red">must be 16 digits</span>;
+    }
+    return null;
+  }
+
+  function CardNumberInputError() {
+    if (cardNumberInputError) {
+      return <span className="red">is numbers only</span>;
+    }
+    return null;
+  }
+
+  return (
+    <>
+      <label htmlFor="form-card=number">
+        Card Number <CardNumberLength /> <CardNumberInputError />
+      </label>
       <input
         id="form-card-number"
         name="card-number"
@@ -52,52 +56,90 @@ export default function CardInputPage() {
         pattern="[0-9 ]{19}"
         maxLength="19"
       />
+    </>
+  );
+}
+
+function FormCardExpiryPart() {
+  const { expiryMM, expiryYY, handleExpiryMMChange, handleExpiryYYChange, handleExpiryMMBlur, handleExpiryYYBlur, checkIsNumber } =
+    useContext(AppContext);
+  return (
+    <div className="form-expiry">
+      <label htmlFor="form-expire-mm">Exp. Date (MM/YY)</label>
+      <input
+        id="form-expire-mm"
+        name="expire-mm"
+        type="text"
+        placeholder="MM"
+        onChange={handleExpiryMMChange}
+        onKeyDown={checkIsNumber}
+        onBlur={handleExpiryMMBlur}
+        value={expiryMM}
+        pattern="[0-9]{2}"
+        maxLength="2"
+      />
+      <input
+        id="form-expire-yy"
+        name="expire-yy"
+        type="text"
+        placeholder="YY"
+        onChange={handleExpiryYYChange}
+        onKeyDown={checkIsNumber}
+        onBlur={handleExpiryYYBlur}
+        value={expiryYY}
+        pattern="[0-9]{2}"
+        maxLength="2"
+      />
+    </div>
+  );
+}
+
+function FormCardCVCPart() {
+  const { cvc, handleCvcChange, checkIsNumber } = useContext(AppContext);
+
+  function CVCLength() {
+    if (cvc.length < 3 && cvc.length !== 0) {
+      return <span className="red">must be 3 digits</span>;
+    }
+    return null;
+  }
+
+  return (
+    <div className="form-cvc">
+      <label htmlFor="form-cvc">
+        CVC <CVCLength />
+      </label>
+      <input
+        id="form-cvc"
+        name="form-cvc"
+        type="text"
+        inputMode="numeric"
+        placeholder="e.g. 123"
+        onChange={handleCvcChange}
+        onKeyDown={checkIsNumber}
+        autoComplete="cc-csc"
+        value={cvc}
+        pattern="[0-9]{3}"
+        maxLength="3"
+      />
+    </div>
+  );
+}
+
+export default function CardInputPage() {
+  const { cardNumber, cardHolder, expiryMM, expiryYY, cvc } = useContext(AppContext);
+
+  const formIsNotComplete = !cardNumber || !cardHolder || !expiryMM || !expiryYY || !cvc;
+
+  return (
+    <form onSubmit={(e) => e.preventDefault()}>
+      <FormCardholderNamePart />
+      <FormCardNumberPart />
       <div className="form-expiry-and-cvc">
-        <div className="form-expiry">
-          <label htmlFor="form-expire-mm">Exp. Date (MM/YY)</label>
-          <input
-            id="form-expire-mm"
-            name="expire-mm"
-            type="text"
-            placeholder="MM"
-            onChange={handleExpiryMMChange}
-            onKeyDown={checkIsNumber}
-            onBlur={handleExpiryMMBlur}
-            value={expiryMM}
-            pattern="[0-9]{2}"
-            maxLength="2"
-          />
-          <input
-            id="form-expire-yy"
-            name="expire-yy"
-            type="text"
-            placeholder="YY"
-            onChange={handleExpiryYYChange}
-            onKeyDown={checkIsNumber}
-            onBlur={handleExpiryYYBlur}
-            value={expiryYY}
-            pattern="[0-9]{2}"
-            maxLength="2"
-          />
-        </div>
-        <div className="form-cvc">
-          <label htmlFor="form-cvc">CVC {cvc.length < 3 && cvc.length !== 0 && <span className="red">3 digits</span>}</label>
-          <input
-            id="form-cvc"
-            name="form-cvc"
-            type="text"
-            inputMode="numeric"
-            placeholder="e.g. 123"
-            onChange={handleCvcChange}
-            onKeyDown={checkIsNumber}
-            autoComplete="cc-csc"
-            value={cvc}
-            pattern="[0-9]{3}"
-            maxLength="3"
-          />
-        </div>
+        <FormCardExpiryPart />
+        <FormCardCVCPart />
       </div>
-      <button type="submit" disabled={!cardNumber || !cardHolder || !expiryMM || !expiryYY || !cvc}>
+      <button type="submit" disabled={formIsNotComplete}>
         Confirm
       </button>
     </form>

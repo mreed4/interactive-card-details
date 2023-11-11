@@ -73,11 +73,6 @@ input[type="text"]::placeholder {
 
 input[type="text"]:focus {
   border-color: var(--very-dark-violet);
-  /* border: double 3px transparent;
-  border-radius: 6px;
-  background-image: linear-gradient(hsl(249, 99%, 64%) to hsl(278, 94%, 30%));
-  background-origin: border-box;
-  background-clip: padding-box, border-box; */
 }
 
 input[type="text"]:invalid {
