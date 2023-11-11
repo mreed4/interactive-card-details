@@ -26,7 +26,7 @@
 body {
   display: flex;
   min-height: 100vh;
-  overflow: hidden;
+  /* overflow: hidden; */
   background-image: url("/img/bg-main-desktop.png");
   background-repeat: no-repeat;
   background-size: contain;
@@ -137,6 +137,10 @@ button:disabled {
   box-shadow: 0 0 2rem hsla(0, 0%, 0%, 0.2);
 }
 
+.card > img {
+  width: 100%;
+}
+
 .card-front {
   color: var(--white);
   margin-bottom: 2rem;
@@ -222,9 +226,6 @@ button:disabled {
   margin-right: 0.5rem;
 }
 
-.thank-you-page {
-}
-
 .mono {
   font-family: "Space Mono", monospace;
 }
@@ -239,5 +240,70 @@ button:disabled {
   }
   to {
     opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    display: block;
+    background-image: url("/img/bg-main-mobile.png");
+    /* background-size: cover; */
+    background-position: top;
+    background-repeat: no-repeat;
+  }
+
+  #root {
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .form-or-thank-you-container {
+    padding-left: 0;
+    padding: 0 1rem;
+    margin-top: -5rem;
+    width: 100%;
+  }
+
+  .form-or-thank-you-container > section {
+    width: 100%;
+  }
+
+  .card-container {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .card-front,
+  .card-back {
+    margin: 0;
+    scale: 0.75;
+  }
+
+  .card-front {
+    transform: translate(-2rem, -9rem);
+    z-index: 2;
+  }
+
+  .card-back {
+    transform: translateX(2rem);
+  }
+
+  .card-number {
+    font-size: 1.15rem;
+  }
+
+  .form-expiry input[type="text"] {
+    margin-right: 0.25rem !important;
+  }
+
+  .form-cvc {
+    flex: 1;
+    padding-left: 0.25rem;
   }
 }

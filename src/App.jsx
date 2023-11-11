@@ -8,7 +8,7 @@ function CardContainer() {
   const { cardNumber, cardHolder, expiryMM, expiryYY, cvc } = useContext(AppContext);
   return (
     <div className="card-container">
-      <div className="card-front">
+      <div className="card card-front">
         <img src="/img/bg-card-front.png" alt="card front" />
         <div className="card-front-logo-and-text">
           <div className="card-logo">
@@ -25,7 +25,7 @@ function CardContainer() {
           </div>
         </div>
       </div>
-      <div className="card-back">
+      <div className="card card-back">
         <img src="/img/bg-card-back.png" alt="card back" />
         <div className="card-back-text">
           <span className="card-cvc mono">{!cvc ? "123" : cvc}</span>
