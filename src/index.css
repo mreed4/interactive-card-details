@@ -178,7 +178,7 @@ button:disabled {
   color: var(--white);
 }
 
-.form-container {
+.form-or-thank-you-container form {
   padding-left: 5rem;
 }
 
