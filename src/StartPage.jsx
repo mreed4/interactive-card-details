@@ -5,17 +5,35 @@ export default function StartPage() {
   const [cardNumberInputError, setCardNumberInputError] = useState(false);
   const maskedCardNumber = cardNumber.match(/.{1,4}/g)?.join(" ") || "";
   const [cardHolder, setCardHolder] = useState(""); // "Jane Appleseed
+  const [cardHolderLettersRemaining, setCardHolderLettersRemaining] = useState(26);
   const [expiryMM, setExpiryMM] = useState(""); // "01"
   const [expiryYY, setExpiryYY] = useState(""); // "23"
   const [cvc, setCvc] = useState(""); // "123"
 
-  function handleCardNumberChange(e) {
-    const isValid = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"].includes(e.target.value.slice(-1));
+  function handleCardHolderChange(e) {
+    const isValid = /^[a-zA-Z ]*$/.test(e.target.value);
     if (isValid) {
-      setCardNumber(e.target.value);
+      setCardHolder(e.target.value);
+
+      setCardHolderLettersRemaining(26 - e.target.value.length);
     } else {
-      setCardNumber(e.target.value.slice(0, -1));
+      setCardHolder(e.target.value.slice(0, -1));
     }
+  }
+
+  function handleCardNumberChange(e) {
+    // const isValid = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"].includes(e.target.value.slice(-1));
+    // if (isValid) {
+    //   const value = e.target.value.replace(/\D/g, ""); // Remove non-digits
+    //   const groups = value.match(/(\d{1,4})/g); // Group digits in 4s
+    //   setCardNumber(groups?.join(" ") || "");
+    // } else {
+    //   setCardNumber(e.target.value.slice(0, -1));
+    // }
+
+    const value = e.target.value.replace(/\D/g, ""); // Remove non-digits
+    const groups = value.match(/(\d{1,4})/g); // Group digits in 4s
+    setCardNumber(groups?.join(" ") || "");
   }
 
   function handleExpiryMMChange(e) {
@@ -56,6 +74,30 @@ export default function StartPage() {
     }
   }
 
+  function handleExpiryMMBlur(e) {
+    if (e.target.value.length === 1) {
+      setExpiryMM("0" + e.target.value);
+    }
+    if (e.target.value.length === 0) {
+      setExpiryMM("");
+    }
+    if (e.target.value.length === "00") {
+      setExpiryMM("00");
+    }
+  }
+
+  function handleExpiryYYBlur(e) {
+    if (e.target.value.length === 1) {
+      setExpiryYY("0" + e.target.value);
+    }
+    if (e.target.value.length === 0) {
+      setExpiryYY("");
+    }
+    if (e.target.value.length === "00") {
+      setExpiryYY("00");
+    }
+  }
+
   return (
     <>
       <div className="card-container">
@@ -66,12 +108,11 @@ export default function StartPage() {
               <img src="/img/card-logo.svg" alt="card logo" />
             </div>
             <div className="card-info uppercase">
-              <div className="card-number mono">{!cardNumber ? "0000 0000 000 0000" : maskedCardNumber}</div>
+              <div className="card-number mono">{!cardNumber ? "1234 5678 9123 0000" : cardNumber}</div>
               <div className="card-holder-and-expiry small">
                 <div className="card-holder">{!cardHolder ? "Jane Appleseed" : cardHolder}</div>
                 <div className="card-expiry mono">
-                  {!expiryMM ? "00" : Number(expiryMM) < 10 && Number(expiryMM) > 0 ? `0${expiryMM}` : expiryMM}/
-                  {!expiryYY ? "00" : Number(expiryYY) < 10 && Number(expiryYY) > 0 ? `0${expiryYY}` : expiryYY}
+                  {!expiryMM ? "00" : expiryMM}/{!expiryYY ? "00" : expiryYY}
                 </div>
               </div>
             </div>
@@ -80,7 +121,7 @@ export default function StartPage() {
         <div className="card-back">
           <img src="/img/bg-card-back.png" alt="card back" />
           <div className="card-back-text">
-            <span className="card-cvc mono">{!cvc ? "000" : cvc}</span>
+            <span className="card-cvc mono">{!cvc ? "123" : cvc}</span>
           </div>
         </div>
       </div>
@@ -92,12 +133,17 @@ export default function StartPage() {
             name="cardholder-name"
             type="text"
             placeholder="e.g. Jane Appleseed"
-            onChange={(e) => setCardHolder(e.target.value)}
+            onChange={handleCardHolderChange}
             value={cardHolder}
             pattern="[A-Za-z ]{1,26}"
-            maxLength={26}
+            maxLength="26"
           />
-          <label htmlFor="form-card=number">Card Number</label>
+          {/* {cardHolderLettersRemaining} */}
+          <label htmlFor="form-card=number">
+            Card Number {cardNumberInputError && <span className="red">Numbers only</span>}{" "}
+            {cardNumber.length < 19 && cardNumber.length !== 0 && <span className="red">16 digits required</span>}
+          </label>
+
           <input
             id="form-card-number"
             name="card-number"
@@ -108,8 +154,8 @@ export default function StartPage() {
             onKeyDown={checkIsNumber}
             autoComplete="cc-number"
             value={cardNumber}
-            pattern="[0-9]{16}"
-            maxLength="16"
+            pattern="[0-9 ]{19}"
+            maxLength="19"
           />
           <div className="form-expiry-and-cvc">
             <div className="form-expiry">
@@ -121,6 +167,7 @@ export default function StartPage() {
                 placeholder="MM"
                 onChange={handleExpiryMMChange}
                 onKeyDown={checkIsNumber}
+                onBlur={handleExpiryMMBlur}
                 value={expiryMM}
                 pattern="[0-9]{2}"
                 maxLength="2"
@@ -132,6 +179,7 @@ export default function StartPage() {
                 placeholder="YY"
                 onChange={handleExpiryYYChange}
                 onKeyDown={checkIsNumber}
+                onBlur={handleExpiryYYBlur}
                 value={expiryYY}
                 pattern="[0-9]{2}"
                 maxLength="2"
