@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { AppContext } from "./AppContext";
+import { useNavigate } from "react-router-dom";
 
 function FormCardholderNamePart() {
   const { cardHolder, handleCardHolderChange } = useContext(AppContext);
@@ -129,17 +130,20 @@ function FormCardCVCPart() {
 export default function CardInputPage() {
   const { cardNumber, cardHolder, expiryMM, expiryYY, cvc } = useContext(AppContext);
 
-  const formIsNotComplete = !cardNumber || !cardHolder || !expiryMM || !expiryYY || !cvc;
+  const formIsComplete =
+    cardNumber.length === 19 && cardHolder.length > 0 && expiryMM.length === 2 && expiryYY.length === 2 && cvc.length === 3;
+
+  const navigate = useNavigate();
 
   return (
-    <form onSubmit={(e) => e.preventDefault()}>
+    <form onSubmit={(e) => e.preventDefault() || navigate("/complete")}>
       <FormCardholderNamePart />
       <FormCardNumberPart />
       <div className="form-expiry-and-cvc">
         <FormCardExpiryPart />
         <FormCardCVCPart />
       </div>
-      <button type="submit" disabled={formIsNotComplete}>
+      <button type="submit" disabled={!formIsComplete}>
         Confirm
       </button>
     </form>

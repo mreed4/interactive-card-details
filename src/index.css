@@ -62,9 +62,11 @@ input[type="text"] {
   width: 100%;
   padding: 0.75rem 1rem;
   border-radius: 0.5rem;
-  border: 2px solid var(--light-grayish-violet);
+  border: 2px solid white;
+  border-color: var(--light-grayish-violet);
   margin-bottom: 1rem;
   font-size: 1rem;
+  transition: border-color 250ms ease-in-out;
 }
 
 input[type="text"]::placeholder {
@@ -72,7 +74,7 @@ input[type="text"]::placeholder {
 }
 
 input[type="text"]:focus {
-  border-color: var(--very-dark-violet);
+  border-color: hsl(249, 99%, 64%);
 }
 
 input[type="text"]:invalid {
@@ -91,6 +93,8 @@ button {
   color: var(--white);
   background: var(--very-dark-violet);
   margin-bottom: 1rem;
+  opacity: 1;
+  transition: opacity 250ms ease-in-out;
 }
 
 button:disabled {
@@ -202,28 +206,4 @@ button:disabled {
 
 .red {
   color: var(--red);
-}
-
-@keyframes subtle-move1 {
-  0% {
-    transform: translateX(0) translateY(0);
-  }
-  50% {
-    transform: translateX(0.125rem) translateY(0.125rem);
-  }
-  100% {
-    transform: translateX(0) translateY(0);
-  }
-}
-
-@keyframes subtle-move2 {
-  0% {
-    transform: translateX(0) translateY(0);
-  }
-  50% {
-    transform: translateX(-0.125rem) translateY(-0.125rem);
-  }
-  100% {
-    transform: translateX(0) translateY(0);
-  }
 }
